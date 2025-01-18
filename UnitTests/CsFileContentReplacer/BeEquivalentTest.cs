@@ -1,7 +1,7 @@
-﻿using NFluent;
-using fluentassertions_to_nfluent_migrator;
+﻿using CommandLine;
+using NFluent;
 
-namespace unit_tests;
+namespace UnitTests;
 
 public class BeEquivalentToTests
 {

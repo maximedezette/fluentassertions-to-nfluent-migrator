@@ -1,5 +1,6 @@
 ﻿using System.Text;
-using fluentassertions_to_nfluent_migrator;
+
+namespace CommandLine;
 
 internal class Program
 {

@@ -34,7 +34,7 @@ Once the project is built, you can use the tool by running the compiled executab
 ### Command Format
 
 ```bash
-.\output\fluentassertions-to-nfluent-migrator.exe <path-to-directory>
+.\output\Migrator.exe <path-to-directory>
 ```
 
 Where <path-to-directory> is the path to the directory containing the C# project files (.cs and .csproj). The tool will process all matching files in the specified directory and its subdirectories.

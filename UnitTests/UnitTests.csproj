@@ -2,10 +2,11 @@
 
     <PropertyGroup>
         <TargetFramework>net9.0</TargetFramework>
-        <RootNamespace>unit_tests</RootNamespace>
+        <RootNamespace>UnitTests</RootNamespace>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
+        <AssemblyName>UnitTests</AssemblyName>
     </PropertyGroup>
 
     <ItemGroup>
@@ -21,7 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\fluentassertions-to-nfluent-migrator\fluentassertions-to-nfluent-migrator.csproj" />
+      <ProjectReference Include="..\CommandLine\CommandLine.csproj" />
     </ItemGroup>
 
 </Project>

@@ -1,6 +1,7 @@
-﻿using NFluent;
+﻿using CommandLine;
+using NFluent;
 
-namespace unit_tests.CsProjFileContentReplacer;
+namespace UnitTests;
 
 public class CsprojTest
 {
@@ -12,7 +13,7 @@ public class CsprojTest
     {
         const string nfluentEquivalent = "<PackageReference Include=\"NFluent\" Version=\"3.1.0\"/>";
         
-        var actual = fluentassertions_to_nfluent_migrator.CsProjFileContentReplacer.Replace(fluentAssertionsPackageName);
+        var actual = CsProjFileContentReplacer.Replace(fluentAssertionsPackageName);
         
         Check.That(actual).IsEqualTo(nfluentEquivalent);
     }
