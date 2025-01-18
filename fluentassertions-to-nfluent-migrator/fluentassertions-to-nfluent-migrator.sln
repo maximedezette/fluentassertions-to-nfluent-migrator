@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "fluentassertions-to-nfluent-migrator", "fluentassertions-to-nfluent-migrator.csproj", "{F06E133A-5F99-46CA-B184-99965409BC62}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "unit-tests", "..\unit-tests\unit-tests\unit-tests.csproj", "{45B79B62-8244-47CE-823D-D90844FA660C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F06E133A-5F99-46CA-B184-99965409BC62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F06E133A-5F99-46CA-B184-99965409BC62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F06E133A-5F99-46CA-B184-99965409BC62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F06E133A-5F99-46CA-B184-99965409BC62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45B79B62-8244-47CE-823D-D90844FA660C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45B79B62-8244-47CE-823D-D90844FA660C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45B79B62-8244-47CE-823D-D90844FA660C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45B79B62-8244-47CE-823D-D90844FA660C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
