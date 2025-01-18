@@ -23,7 +23,7 @@ Once the project is built, you can use the tool by running the compiled executab
 1. Clone the repository:
     ```bash
     git clone https://github.com/yourusername/fluentassertions-to-nfluent-migrator.git
-    cd fluentassertions-to-nfluent-migrator
+    cd fluentassertions-to-nfluent-migrator/fluentassertions-to-nfluent-migrator
     ```
 
 2. Build the project using the .NET CLI:
@@ -42,7 +42,7 @@ Where <path-to-directory> is the path to the directory containing the C# project
 
 ### Example Usage
 
-
+[![demo](https://img.youtube.com/vi/iXzMbR6yFEQ/0.jpg)](https://www.youtube.com/watch?v=iXzMbR6yFEQ)
 
 ### Expected Output
 
