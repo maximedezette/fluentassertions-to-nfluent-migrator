@@ -23,7 +23,7 @@ Once the project is built, you can use the tool by running the compiled executab
 1. Clone the repository:
     ```bash
     git clone https://github.com/yourusername/fluentassertions-to-nfluent-migrator.git
-    cd fluentassertions-to-nfluent-migrator/fluentassertions-to-nfluent-migrator
+    cd fluentassertions-to-nfluent-migrator
     ```
 
 2. Build the project using the .NET CLI:
