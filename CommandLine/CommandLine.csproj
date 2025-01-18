@@ -6,6 +6,7 @@
         <RootNamespace>CommandLine</RootNamespace>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <AssemblyName>Migrator</AssemblyName>
     </PropertyGroup>
 
 </Project>

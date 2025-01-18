@@ -1,5 +1,6 @@
 ﻿using System.Text;
-using CommandLine;
+
+namespace CommandLine;
 
 internal class Program
 {
