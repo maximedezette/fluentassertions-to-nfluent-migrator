@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace fluentassertions_to_nfluent_migrator;
+namespace CommandLine;
 
 public class CsProjFileContentReplacer
 {

@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "fluentassertions-to-nfluent-migrator", "fluentassertions-to-nfluent-migrator.csproj", "{F06E133A-5F99-46CA-B184-99965409BC62}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "unit-tests", "..\unit-tests\unit-tests\unit-tests.csproj", "{45B79B62-8244-47CE-823D-D90844FA660C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "unit-tests", "..\UnitTests\UnitTests\unit-tests.csproj", "{45B79B62-8244-47CE-823D-D90844FA660C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
