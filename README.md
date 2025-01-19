@@ -1,14 +1,20 @@
 # FluentAssertions to NFluent Migrator
 
-A simple command-line tool for migrating your code from **FluentAssertions** to **NFluent**. This tool automatically updates all `using` directives and assertion statements in your C# project files (`.cs` and `.csproj` files) to use **NFluent** syntax instead of **FluentAssertions**.
-
 [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fmaximedezette%2Ffluentassertions-to-nfluent-migrator&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=PAGE+VIEWS&edge_flat=false)](https://hits.seeyoufarm.com)
+
+A simple command-line tool for migrating your code from **FluentAssertions** to **NFluent**. This tool automatically updates all `using` directives and assertion statements in your C# project files (`.cs` and `.csproj` files) to use **NFluent** syntax instead of **FluentAssertions**.
 
 ## Features
 - Replaces `using FluentAssertions` with `using NFluent`.
 - Converts FluentAssertions assertions to equivalent NFluent assertions (e.g., `.Should().Be()` → `.IsEqualTo()`).
 - Supports `.cs` and `.csproj` files.
 - Process multiple files in a directory and subdirectories.
+  
+![how_to_part_1](https://github.com/user-attachments/assets/dcedb34c-e643-446d-9123-ae53eb329b91)
+
+### Example Usage
+
+[![demo](https://img.youtube.com/vi/oVfizaskDAU/0.jpg)](https://www.youtube.com/watch?v=oVfizaskDAU)
 
 ## Installation
 
@@ -40,11 +46,6 @@ Once the project is built, you can use the tool by running the compiled executab
 ```
 
 Where <path-to-directory> is the path to the directory containing the C# project files (.cs and .csproj). The tool will process all matching files in the specified directory and its subdirectories.
-
-
-### Example Usage
-
-[![demo](https://img.youtube.com/vi/iXzMbR6yFEQ/0.jpg)](https://www.youtube.com/watch?v=iXzMbR6yFEQ)
 
 ### Expected Output
 
