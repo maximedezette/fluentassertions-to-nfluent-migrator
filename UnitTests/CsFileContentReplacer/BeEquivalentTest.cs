@@ -13,7 +13,7 @@ public class BeEquivalentToTests
         
         var actual = CsFileContentReplacer.Replace(fluentAssertions);
         
-        Check.That(actual).HasFieldsWithSameValues(nfluentEquivalent);
+        Check.That(actual).IsEqualTo(nfluentEquivalent);
     }
 
     [Fact]
@@ -24,7 +24,7 @@ public class BeEquivalentToTests
         
         var actual = CsFileContentReplacer.Replace(fluentAssertions);
         
-        Check.That(actual).HasFieldsWithSameValues(nfluentEquivalent);
+        Check.That(actual).IsEqualTo(nfluentEquivalent);
     }
 
     [Fact]
@@ -35,6 +35,6 @@ public class BeEquivalentToTests
         
         var actual = CsFileContentReplacer.Replace(fluentAssertions);
         
-        Check.That(actual).HasFieldsWithSameValues(nfluentEquivalent);
+        Check.That(actual).IsEqualTo(nfluentEquivalent);
     }
 }
