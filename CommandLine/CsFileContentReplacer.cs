@@ -26,28 +26,53 @@ public class CsFileContentReplacer : IReplacer
         var generalReplacements = new (string Pattern, string Replacement)[]
         {
             // .Should().NotBeNull() -> Check.That(var).IsNotNull();
-            (@"(?<subject>\S(?:.*\S)?)\s*\.Should\(\)\s*\.NotBeNull\s*\(\s*\)\s*;", "Check.That(${subject}).IsNotNull();"),
+            GetSubjectOnlyReplacement("NotBeNull", "Check.That(${subject}).IsNotNull();"),
                 
             // .Should().BeNull() -> Check.That(var).IsNull();
-            (@"(?<subject>\S(?:.*\S)?)\s*\.Should\(\)\s*\.BeNull\s*\(\s*\)\s*;", "Check.That(${subject}).IsNull();"),
+            GetSubjectOnlyReplacement("BeNull", "Check.That(${subject}).IsNull();"),
                 
             // .Should().Be(value) -> Check.That(var).IsEqualTo(value);
-            (@"(?<subject>\S(?:.*\S)?)\s*\.Should\(\)\s*\.Be\s*\(\s*(?<value>.+?)\s*\)\s*;", "Check.That(${subject}).IsEqualTo(${value});"),
+            GetSubjectValueReplacement("Be", "Check.That(${subject}).IsEqualTo(${value});"),
             
-            // .Should().BeEquivalentTo(object) -> Check.That(var).IsEquivalentTo(object);
-            (@"(?<subject>\S(?:.*\S)?)\s*\.Should\(\)\s*\.BeEquivalentTo\s*\(\s*(?<object>.+?)\s*\)\s*;", "Check.That(${subject}).HasFieldsWithSameValues(${object});"),
+            // .Should().NotBe(value) -> Check.That(var).IsNotEqualTo(value);
+            GetSubjectValueReplacement("NotBe", "Check.That(${subject}).IsNotEqualTo(${value});"),
+            
+            // .Should().BeGreaterThan(value) -> Check.That(var).IsGreaterThan(value);
+            GetSubjectValueReplacement("BeGreaterThan", "Check.That(${subject}).IsGreaterThan(${value});"),
+            
+            // .Should().BeGreaterOrEqualTo(value) -> Check.That(var).IsGreaterOrEqualTo(value);
+            GetSubjectValueReplacement("BeGreaterOrEqualTo", "Check.That(${subject}).IsGreaterOrEqualTo(${value});"),
+            
+            // .Should().BeLessThan(value) -> Check.That(var).IsLessThan(value);
+            GetSubjectValueReplacement("BeLessThan", "Check.That(${subject}).IsLessThan(${value});"),
+            
+            // .Should().BeLessOrEqualTo(value) -> Check.That(var).IsLessOrEqualTo(value);
+            GetSubjectValueReplacement("BeLessOrEqualTo", "Check.That(${subject}).IsLessOrEqualTo(${value});"),
+            
+            // .Should().BeOfType<value>() -> Check.That(var).IsInstanceOfType(value);
+            (@"(?<subject>\S(?:.*\S)?)\s*\.Should\s*\(\s*\)\s*\.BeOfType\s*<\s*(?<value>[^\>]+)\s*>\s*\(\s*\)\s*;", "Check.That(${subject}).IsInstanceOfType(typeof(${value}));"),
+            
+            // .Should().BeEquivalentTo(object) -> Check.That(var).HasFieldsWithSameValues(object);
+            (@"(?<subject>\S(?:.*\S)?)\s*\.Should\s*\(\s*\)\s*\.BeEquivalentTo\s*\(\s*(?<object>.+?)\s*\)\s*(?:,\s*""[^""]*""\s*)?;", "Check.That(${subject}).HasFieldsWithSameValues(${object});"),
             
             // .Should().Contain(value) -> Check.That(var).Contains(value);
-            (@"(?<subject>\S(?:.*\S)?)\s*\.Should\(\)\s*\.Contain\s*\(\s*(?<value>.+?)\s*\)\s*;", "Check.That(${subject}).Contains(${value});"),
+            GetSubjectValueReplacement("Contain", "Check.That(${subject}).Contains(${value});"),
                 
             // .Should().NotContain(value) -> Check.That(var).Not.Contains(value);
-            (@"(?<subject>\S(?:.*\S)?)\s*\.Should\(\)\s*\.NotContain\s*\(\s*(?<value>.+?)\s*\)\s*;", "Check.That(${subject}).Not.Contains(${value});"),
+            GetSubjectValueReplacement("NotContain", "Check.That(${subject}).Not.Contains(${value});"),
             
             // .Should().BeEmpty() -> Check.That(var).IsEmpty();
-            (@"(?<subject>\S(?:.*\S)?)\s*\.Should\(\)\s*\.BeEmpty\s*\(\s*\)\s*;", "Check.That(${subject}).IsEmpty();"),
+            GetSubjectOnlyReplacement("BeEmpty", "Check.That(${subject}).IsEmpty();"),
                 
             // .Should().NotBeEmpty() -> Check.That(var).IsNotEmpty();
-            (@"(?<subject>\S(?:.*\S)?)\s*\.Should\(\)\s*\.NotBeEmpty\s*\(\s*\)\s*;", "Check.That(${subject}).IsNotEmpty();")
+            GetSubjectOnlyReplacement("NotBeEmpty", "Check.That(${subject}).IsNotEmpty();"),
+            
+            // .Should().StarsWith(value) -> Check.That(var).StartsWith(value);
+            GetSubjectValueReplacement("StartWith", "Check.That(${subject}).StartsWith(${value});"),
+            
+            // .Should().EndWith(value) -> Check.That(var).EndsWith(value);
+            GetSubjectValueReplacement("EndWith", "Check.That(${subject}).EndsWith(${value});"),
+            
         };
 
         // Apply general replacements
@@ -57,6 +82,16 @@ public class CsFileContentReplacer : IReplacer
         }
 
         return content;
+    }
+
+    private static (string, string) GetSubjectValueReplacement(string Pattern, string Replacement)
+    {
+        return ($@"(?<subject>\S(?:.*\S)?)\s*\.Should\(\)\s*\.{Pattern}\s*\(\s*(?<value>[^\s,)\(]+?)\s*(?:,\s*.*)?\)\s*;", Replacement);
+    }
+    
+    private static (string, string) GetSubjectOnlyReplacement(string Pattern, string Replacement)
+    {
+        return ($@"(?<subject>\S(?:.*\S)?)\s*\.Should\s*\(\s*\)\s*\.{Pattern}\s*\(\s*\)\s*(?:,\s*""[^""]*""\s*)?;", Replacement);
     }
 
     /// <summary>
@@ -96,19 +131,19 @@ public class CsFileContentReplacer : IReplacer
         var booleanReplacements = new (string Pattern, string Replacement)[]
         {
             // .Should().BeTrue() -> Check.That(var).IsTrue();
-            (@"(?<subject>\S(?:.*\S)?)\s*\.Should\(\)\s*\.BeTrue\s*\(\s*\)\s*;", "Check.That(${subject}).IsTrue();"),
+            GetSubjectOnlyReplacement("BeTrue","Check.That(${subject}).IsTrue();"),
                 
             // .Should().BeFalse() -> Check.That(var).IsFalse();
-            (@"(?<subject>\S(?:.*\S)?)\s*\.Should\(\)\s*\.BeFalse\s*\(\s*\)\s*;", "Check.That(${subject}).IsFalse();"),
+            GetSubjectOnlyReplacement("BeFalse","Check.That(${subject}).IsFalse();"),
             
             // .Should().NotBeFalse() -> Check.That(var).Not.IsFalse();
-            (@"(?<subject>\S(?:.*\S)?)\s*\.Should\(\)\s*\.NotBeFalse\s*\(\s*\)\s*;", "Check.That(${subject}).Not.IsFalse();"),
+            GetSubjectOnlyReplacement("NotBeFalse","Check.That(${subject}).Not.IsFalse();"),
 
             // .Should().NotBeTrue() -> Check.That(var).Not.IsTrue();
-            (@"(?<subject>\S(?:.*\S)?)\s*\.Should\(\)\s*\.NotBeTrue\s*\(\s*\)\s*;", "Check.That(${subject}).Not.IsTrue();"),
+            GetSubjectOnlyReplacement("NotBeTrue","Check.That(${subject}).Not.IsTrue();"),
 
             // .Should().Imply(other) -> Check.That(var).Imply(other);
-            (@"(?<subject>\S(?:.*\S)?)\s*\.Should\(\)\s*\.Imply\s*\(\s*(?<other>\S(?:.*\S)?)\s*\)\s*;", "Check.That(${subject}).Imply(${other});")
+            GetSubjectValueReplacement("Imply","Check.That(${subject}).Imply(${value});"),
         };
 
         // Apply boolean-specific replacements
