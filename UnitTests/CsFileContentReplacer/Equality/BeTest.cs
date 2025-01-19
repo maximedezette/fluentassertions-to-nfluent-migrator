@@ -38,4 +38,26 @@ public class BeTest: CsTestContentReplacerTest
 
         Check.That(actual).IsEqualTo(nfluentEquivalent);
     }
+    
+    [Fact]
+    public void Should_replace_ShouldBe_with_complex_subject()
+    {
+        const string fluentAssertions = "object!.MyMethod(arg1, arg2).Should().Be(42, \"because they have the same values\");";
+        const string nfluentEquivalent = "Check.That(object!.MyMethod(arg1, arg2)).IsEqualTo(42);";
+
+        var actual = CsFileContentReplacer.Replace(fluentAssertions);
+
+        Check.That(actual).IsEqualTo(nfluentEquivalent);
+    }
+    
+    [Fact]
+    public void Should_replace_ShouldBe_with_complex_value()
+    {
+        const string fluentAssertions = "var.Should().Be(await SomeMethod(arg1 , arg2), \"because they have the same values\");";
+        const string nfluentEquivalent = "Check.That(var).IsEqualTo(await SomeMethod(arg1 , arg2));";
+
+        var actual = CsFileContentReplacer.Replace(fluentAssertions);
+
+        Check.That(actual).IsEqualTo(nfluentEquivalent);
+    }
 }

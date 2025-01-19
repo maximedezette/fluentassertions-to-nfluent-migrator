@@ -57,6 +57,12 @@ public class CsFileContentReplacer : IReplacer
             
             // .Should().Contain(value) -> Check.That(var).Contains(value);
             GetSubjectValueReplacement("Contain", "Check.That(${subject}).Contains(${value});"),
+            
+            // .Should().HaveCount(value) -> Check.That(var).HasSize(value);
+            GetSubjectValueReplacement("HaveCount", "Check.That(${subject}).HasSize(${value});"),
+            
+            // .Should().HaveSameCount(value) -> Check.That(var).HasSameSizeAs(value);
+            GetSubjectValueReplacement("HaveSameCount", "Check.That(${subject}).HasSameSizeAs(${value});"),
                 
             // .Should().NotContain(value) -> Check.That(var).Not.Contains(value);
             GetSubjectValueReplacement("NotContain", "Check.That(${subject}).Not.Contains(${value});"),
@@ -65,7 +71,7 @@ public class CsFileContentReplacer : IReplacer
             GetSubjectOnlyReplacement("BeEmpty", "Check.That(${subject}).IsEmpty();"),
                 
             // .Should().NotBeEmpty() -> Check.That(var).IsNotEmpty();
-            GetSubjectOnlyReplacement("NotBeEmpty", "Check.That(${subject}).IsNotEmpty();"),
+            GetSubjectOnlyReplacement("NotBeEmpty", "Check.That(${subject}).Not.IsEmpty();"),
             
             // .Should().StarsWith(value) -> Check.That(var).StartsWith(value);
             GetSubjectValueReplacement("StartWith", "Check.That(${subject}).StartsWith(${value});"),
@@ -86,7 +92,7 @@ public class CsFileContentReplacer : IReplacer
 
     private static (string, string) GetSubjectValueReplacement(string Pattern, string Replacement)
     {
-        return ($@"(?<subject>\S(?:.*\S)?)\s*\.Should\(\)\s*\.{Pattern}\s*\(\s*(?<value>[^\s,)\(]+?)\s*(?:,\s*.*)?\)\s*;", Replacement);
+        return ($@"(?<subject>\S(?:.*\S)?)\s*\.Should\(\)\s*\.{Pattern}\s*\(\s*(?<value>(?:\(.*?\)|[^,()])+)\s*(?:,\s*.*)?\)\s*;", Replacement);
     }
     
     private static (string, string) GetSubjectOnlyReplacement(string Pattern, string Replacement)

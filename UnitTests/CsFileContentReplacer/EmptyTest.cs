@@ -19,7 +19,7 @@ public class EmptyTest: CsTestContentReplacerTest
     public void Should_replace_ShouldNotBeEmpty()
     {
         const string fluentAssertions = "var.Should().NotBeEmpty();";
-        const string nfluentEquivalent = "Check.That(var).IsNotEmpty();";
+        const string nfluentEquivalent = "Check.That(var).Not.IsEmpty();";
         
         var actual = CsFileContentReplacer.Replace(fluentAssertions);
         

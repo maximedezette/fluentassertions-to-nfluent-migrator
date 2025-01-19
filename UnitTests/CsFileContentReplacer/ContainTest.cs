@@ -15,6 +15,29 @@ public class ContainTest: CsTestContentReplacerTest
         
         Check.That(actual).IsEqualTo(nfluentEquivalent);
     }
+    
+        
+    [Fact]
+    public void Should_replace_ShouldContain_with_complex_subject()
+    {
+        const string fluentAssertions = "object!.MyMethod(some args).Should().Contain(\"item\");";
+        const string nfluentEquivalent = "Check.That(object!.MyMethod(some args)).Contains(\"item\");";
+        
+        var actual = CsFileContentReplacer.Replace(fluentAssertions);
+        
+        Check.That(actual).IsEqualTo(nfluentEquivalent);
+    }
+    
+    [Fact]
+    public void Should_replace_ShouldContain_with_spaces()
+    {
+        const string fluentAssertions = "var.Should().Contain(\"other item with many spaces\");";
+        const string nfluentEquivalent = "Check.That(var).Contains(\"other item with many spaces\");";
+        
+        var actual = CsFileContentReplacer.Replace(fluentAssertions);
+        
+        Check.That(actual).IsEqualTo(nfluentEquivalent);
+    }
 
     [Fact]
     public void Should_replace_ShouldNotContain()
