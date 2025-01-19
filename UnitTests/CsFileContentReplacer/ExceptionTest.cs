@@ -1,9 +1,8 @@
-﻿using CommandLine;
-using NFluent;
+﻿using NFluent;
 
-namespace UnitTests;
+namespace UnitTests.CsFileContentReplacer;
 
-public class ExceptionTest
+public class ExceptionTest: CsTestContentReplacerTest
 {
     [Fact]
     public void Should_Replace_Throw()

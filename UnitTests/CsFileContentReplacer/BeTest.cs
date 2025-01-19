@@ -1,9 +1,8 @@
-﻿using CommandLine;
-using NFluent;
+﻿using NFluent;
 
-namespace UnitTests;
+namespace UnitTests.CsFileContentReplacer;
 
-public class BeTest
+public class BeTest: CsTestContentReplacerTest
 {
     [Fact]
     public void Should_replace_ShouldBe()
@@ -13,6 +12,6 @@ public class BeTest
 
         var actual = CsFileContentReplacer.Replace(fluentAssertions);
 
-        Check.That(actual).IsEqualTo(nfluentEquivalent);
+        Check.That<string>(actual).IsEqualTo(nfluentEquivalent);
     }
 }

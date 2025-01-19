@@ -1,9 +1,8 @@
-﻿using CommandLine;
-using NFluent;
+﻿using NFluent;
 
-namespace UnitTests;
+namespace UnitTests.CsProjFileContentReplacer;
 
-public class CsprojTest
+public class CsprojContentReplacerTest: CsProjContentReplacerTest
 {
     
     [Theory]

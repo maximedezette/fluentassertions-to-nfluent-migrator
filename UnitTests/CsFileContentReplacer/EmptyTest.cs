@@ -1,9 +1,8 @@
-﻿using CommandLine;
-using NFluent;
+﻿using NFluent;
 
-namespace UnitTests;
+namespace UnitTests.CsFileContentReplacer;
 
-public class EmptyTest
+public class EmptyTest: CsTestContentReplacerTest
 {
     [Fact]
     public void Should_replace_ShouldBeEmpty()

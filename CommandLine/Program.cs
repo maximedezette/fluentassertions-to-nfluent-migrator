@@ -17,7 +17,7 @@ internal class Program
         var watch = System.Diagnostics.Stopwatch.StartNew();
         var directoryPath = args[0];
         UpdateCsprojFiles(directoryPath);
-        UpdateCsFiles(directoryPath);
+        UpdateTestFiles(directoryPath);
 
         watch.Stop();
         var elapsed = watch.Elapsed.Seconds;
@@ -29,58 +29,42 @@ internal class Program
         Console.ResetColor();
     }
 
-    private static void UpdateCsFiles(string directoryPath)
+    private static void UpdateTestFiles(string directoryPath)
     {
-        var testFilePatterns = new[] { "*StepDef*.cs", "*Test*.cs" }; 
-        
+        var files = GetTestFiles(directoryPath);
+        ProcessReplacement(files, new CsFileContentReplacer());
+    }
+
+    private static string[] GetTestFiles(string directoryPath)
+    {
+        var testFilePatterns = new[] { "*StepDef*.cs", "*Test*.cs" };
+
         var files = testFilePatterns
             .SelectMany(pattern => Directory.GetFiles(directoryPath, pattern, SearchOption.AllDirectories))
             .Distinct()
             .ToArray();
-
-        // Spinner loader setup
-        var spinner = new[] { '|', '/', '-', '\\' };
-        int i = 0;
-
-        Console.WriteLine("Processing test files...");
-
-        // Process each .cs file
-        foreach (var file in files)
-        {
-            // Display the spinner during the replacement
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write($"Processing {Path.GetFileName(file)}... ");
-            var content = File.ReadAllText(file);
-            var updatedContent = CsFileContentReplacer.Replace(content);
-            File.WriteAllText(file, updatedContent, GetEncoding(file));
-
-            // Only move the cursor if it's safe
-            if (Console.CursorLeft > 0)
-            {
-                Console.SetCursorPosition(Console.CursorLeft - 1, Console.CursorTop); // Move cursor to the left
-                Console.Write(spinner[i % spinner.Length]); // Print the next spinner character
-                Thread.Sleep(100); // Wait a bit for the spinner effect
-                i++;
-                Console.SetCursorPosition(Console.CursorLeft - 1, Console.CursorTop); // Remove spinner
-
-            }
-
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.SetCursorPosition(0, Console.CursorTop);
-            Console.WriteLine($"Processing {Path.GetFileName(file)}... Done");
-            Console.ResetColor();
-        }
+        return files;
     }
 
     private static void UpdateCsprojFiles(string directoryPath)
     {
+        var csProjFiles = GetCsProjFiles(directoryPath);
+        ProcessReplacement(csProjFiles, new CsProjFileContentReplacer());
+    }
+    
+    private static string[] GetCsProjFiles(string directoryPath)
+    {
         const string csProjFileExtension = "csproj";
-        
+        var csProjFiles = Directory.GetFiles(directoryPath, $"*.{csProjFileExtension}", SearchOption.AllDirectories);
+        return csProjFiles;
+    }
+
+    private static void ProcessReplacement(string[] csProjFiles, IReplacer replacer)
+    {
         var spinner = new[] { '|', '/', '-', '\\' };
         int i = 0;
         
         Console.WriteLine("Processing .csproj files...");
-        var csProjFiles = Directory.GetFiles(directoryPath, $"*.{csProjFileExtension}", SearchOption.AllDirectories);
 
         foreach (var file in csProjFiles)
         {
@@ -89,7 +73,7 @@ internal class Program
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.Write($"Processing {Path.GetFileName(file)}... ");
             var content = File.ReadAllText(file);
-            var updatedContent = CsProjFileContentReplacer.Replace(content);
+            var updatedContent = replacer.Replace(content);
             File.WriteAllText(file, updatedContent, GetEncoding(file));
 
             // Only move the cursor if it's safe

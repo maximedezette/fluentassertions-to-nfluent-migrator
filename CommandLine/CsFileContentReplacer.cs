@@ -2,14 +2,14 @@ using System.Text.RegularExpressions;
 
 namespace CommandLine;
 
-public class CsFileContentReplacer
+public class CsFileContentReplacer : IReplacer
 {
     /// <summary>
     /// Replaces FluentAssertions syntax with NFluent syntax in the provided code string.
     /// </summary>
     /// <param name="content">The source code to process.</param>
     /// <returns>The updated source code with replaced assertions.</returns>
-    public static string Replace(string content)
+    public string Replace(string content)
     {
         content = Regex.Replace(content, @"using\s+FluentAssertions(\.\w+)*\s*;", "using NFluent;");
 
