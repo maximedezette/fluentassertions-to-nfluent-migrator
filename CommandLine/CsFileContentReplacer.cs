@@ -53,7 +53,7 @@ public class CsFileContentReplacer : IReplacer
             (@"(?<subject>\S(?:.*\S)?)\s*\.Should\s*\(\s*\)\s*\.BeOfType\s*<\s*(?<value>[^\>]+)\s*>\s*\(\s*\)\s*;", "Check.That(${subject}).IsInstanceOfType(typeof(${value}));"),
             
             // .Should().BeEquivalentTo(object) -> Check.That(var).HasFieldsWithSameValues(object);
-            (@"(?<subject>\S(?:.*\S)?)\s*\.Should\s*\(\s*\)\s*\.BeEquivalentTo\s*\(\s*(?<object>.+?)\s*\)\s*(?:,\s*""[^""]*""\s*)?;", "Check.That(${subject}).HasFieldsWithSameValues(${object});"),
+            (@"(?<subject>\S(?:.*\S)?)\s*\.Should\s*\(\s*\)\s*\.BeEquivalentTo\s*\(\s*(?<value>(?:(?>[^(){}]+|\((?<Open>)|(?<-Open>\))|\{(?<Open>)|(?<-Open>\}))*(?(Open)(?!)))+?)\s*\)\s*(?:,\s*""[^""]*""\s*)?;","Check.That(${subject}).HasFieldsWithSameValues(${value});"),
             
             // .Should().Contain(value) -> Check.That(var).Contains(value);
             GetSubjectValueReplacement("Contain", "Check.That(${subject}).Contains(${value});"),
