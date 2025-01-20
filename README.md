@@ -16,6 +16,11 @@ A simple command-line tool for migrating your code from **FluentAssertions** to 
 
 [![demo](https://img.youtube.com/vi/oVfizaskDAU/0.jpg)](https://www.youtube.com/watch?v=oVfizaskDAU)
 
+⚠️ **As of today, not all assertions are fully supported by the tool, and some manual transformations are likely to be required. However, it significantly eases the migration process by automating many common cases.**
+
+
+See the section about the [supported assertions](#fluentAssertions-to-nfluent-migration-support) for more details.
+
 ## Installation
 
 ### Prerequisites
@@ -144,4 +149,85 @@ Add the regex to the `CsFileContentReplacer.cs` to make the test pass:
 ```
 
 And that's it!
+
+# FluentAssertions to NFluent Migration Support
+
+This document provides an overview of the migration support offered by the `CsFileContentReplacer` for transitioning from FluentAssertions to NFluent in C# projects. While the tool automates the replacement of many common assertions, there are limitations, and some manual adjustments may be necessary.
+
+## Supported Transformations
+
+The following FluentAssertions methods are currently supported and are automatically replaced by their NFluent equivalents:
+
+### General Assertions
+| **FluentAssertions**                       | **NFluent**                                   |
+|--------------------------------------------|-----------------------------------------------|
+| `.Should().NotBeNull()`                    | `Check.That(var).IsNotNull();`               |
+| `.Should().BeNull()`                       | `Check.That(var).IsNull();`                  |
+| `.Should().Be(value)`                      | `Check.That(var).IsEqualTo(value);`          |
+| `.Should().NotBe(value)`                   | `Check.That(var).IsNotEqualTo(value);`       |
+| `.Should().BeGreaterThan(value)`           | `Check.That(var).IsGreaterThan(value);`      |
+| `.Should().BeGreaterOrEqualTo(value)`      | `Check.That(var).IsGreaterOrEqualTo(value);` |
+| `.Should().BeLessThan(value)`              | `Check.That(var).IsLessThan(value);`         |
+| `.Should().BeLessOrEqualTo(value)`         | `Check.That(var).IsLessOrEqualTo(value);`    |
+| `.Should().BeEquivalentTo(object)`         | `Check.That(var).HasFieldsWithSameValues(object);` |
+| `.Should().Contain(value)`                 | `Check.That(var).Contains(value);`           |
+| `.Should().OnlyContain(value)`             | `Check.That(var).ContainsOnlyElementsThatMatch(value);` |
+| `.Should().HaveCount(value)`               | `Check.That(var).HasSize(value);`            |
+| `.Should().HaveSameCount(value)`           | `Check.That(var).HasSameSizeAs(value);`      |
+| `.Should().NotContain(value)`              | `Check.That(var).Not.Contains(value);`       |
+| `.Should().BeEmpty()`                      | `Check.That(var).IsEmpty();`                 |
+| `.Should().NotBeEmpty()`                   | `Check.That(var).IsNotEmpty();`              |
+| `.Should().StartWith(value)`               | `Check.That(var).StartsWith(value);`         |
+| `.Should().EndWith(value)`                 | `Check.That(var).EndsWith(value);`           |
+
+### Boolean Assertions
+| **FluentAssertions**               | **NFluent**                        |
+|------------------------------------|------------------------------------|
+| `.Should().BeTrue()`               | `Check.That(var).IsTrue();`        |
+| `.Should().BeFalse()`              | `Check.That(var).IsFalse();`       |
+| `.Should().NotBeTrue()`            | `Check.That(var).Not.IsTrue();`    |
+| `.Should().NotBeFalse()`           | `Check.That(var).Not.IsFalse();`   |
+| `.Should().Imply(other)`           | `Check.That(var).Imply(other);`    |
+
+### Nullable Assertions
+| **FluentAssertions**               | **NFluent**                        |
+|------------------------------------|------------------------------------|
+| `.Should().NotHaveValue()`         | `Check.That(var).Not.HasValue();`  |
+| `.Should().HaveValue()`            | `Check.That(var).HasValue();`      |
+| `.Should().Match(predicate)`       | `Check.That(var).Matches(predicate);` |
+
+### Exception Assertions
+| **FluentAssertions**                       | **NFluent**                                   |
+|--------------------------------------------|-----------------------------------------------|
+| `.Should().Throw<ExceptionType>()`         | `Check.ThatCode(action).Throws<ExceptionType>();` |
+| `.Should().ThrowExactly<ExceptionType>()`  | `Check.ThatCode(action).ThrowsExactly<ExceptionType>();` |
+| `.Should().NotThrow()`                     | `Check.ThatCode(action).DoesNotThrow();`      |
+
+## Limitations
+
+While the `CsFileContentReplacer` automates many assertions, some complex scenarios may require manual intervention, such as:
+
+1. **Unsupported Assertions:** Certain FluentAssertions methods are not yet supported.
+2. **Complex Lambda Expressions:** Assertions using intricate lambda expressions may not be transformed correctly.
+3. **Formatting:** Multi-line or poorly formatted assertions might produce unexpected output.
+
+### Example of Partial Support
+For multi-line assertions, while the tool handles most cases, some extra spaces may appear in the output and need to be manually fixed:
+
+**Input:**
+```csharp
+complexVar.Should()
+    .BeEquivalentTo(
+        new[]
+        {
+            Id = 1,
+            Name = "Test"
+        });
+```
+
+**Output:**
+```csharp
+Check.That(complexVar).HasFieldsWithSameValues(new[] { Id = 1, Name = "Test" });
+```
+
                 
