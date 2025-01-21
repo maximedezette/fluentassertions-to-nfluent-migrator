@@ -82,6 +82,8 @@ public class CsFileContentReplacer : IReplacer
             // .Should().EndWith(value) -> Check.That(var).EndsWith(value);
             GetSubjectValueReplacement("EndWith", "Check.That(${subject}).EndsWith(${value});"),
             
+            // .Should().NotBeNullOrEmpty() -> Check.That(var).Not.IsNullOrEmpty();
+            GetSubjectOnlyReplacement("NotBeNullOrEmpty", "Check.That(${subject}).Not.IsNullOrEmpty();"),
         };
 
         // Apply general replacements
