@@ -30,6 +30,10 @@ public class CsFileContentReplacer : IReplacer
                 
             // .Should().BeNull() -> Check.That(var).IsNull();
             GetSubjectOnlyReplacement("BeNull", "Check.That(${subject}).IsNull();"),
+            
+            // .Should().BeNullOrWhiteSpace() -> Check.That(var).IsNullOrWhiteSpace();
+            GetSubjectOnlyReplacement("BeNullOrWhiteSpace", "Check.That(${subject}).IsNullOrWhiteSpace();"),
+
                 
             // .Should().Be(value) -> Check.That(var).IsEqualTo(value);
             GetSubjectValueReplacement("Be", "Check.That(${subject}).IsEqualTo(${value});"),
@@ -66,6 +70,9 @@ public class CsFileContentReplacer : IReplacer
             
             // .Should().HaveSameCount(value) -> Check.That(var).HasSameSizeAs(value);
             GetSubjectValueReplacement("HaveSameCount", "Check.That(${subject}).HasSameSizeAs(${value});"),
+            
+            // .Should().HaveLength(value) -> Check.That(var).HasSize(value);
+            GetSubjectValueReplacement("HaveLength", "Check.That(${subject}).HasSize(${value});"),
                 
             // .Should().NotContain(value) -> Check.That(var).Not.Contains(value);
             GetSubjectValueReplacement("NotContain", "Check.That(${subject}).Not.Contains(${value});"),
@@ -76,14 +83,17 @@ public class CsFileContentReplacer : IReplacer
             // .Should().NotBeEmpty() -> Check.That(var).IsNotEmpty();
             GetSubjectOnlyReplacement("NotBeEmpty", "Check.That(${subject}).Not.IsEmpty();"),
             
+            // .Should().NotBeNullOrEmpty() -> Check.That(var).Not.IsNullOrEmpty();
+            GetSubjectOnlyReplacement("NotBeNullOrEmpty", "Check.That(${subject}).Not.IsNullOrEmpty();"),
+            
+            // .Should().NotBeNullOrWhiteSpace() -> Check.That(var).Not.IsNullOrWhiteSpace();
+            GetSubjectOnlyReplacement("NotBeNullOrWhiteSpace", "Check.That(${subject}).Not.IsNullOrWhiteSpace();"),
+            
             // .Should().StarsWith(value) -> Check.That(var).StartsWith(value);
             GetSubjectValueReplacement("StartWith", "Check.That(${subject}).StartsWith(${value});"),
             
             // .Should().EndWith(value) -> Check.That(var).EndsWith(value);
             GetSubjectValueReplacement("EndWith", "Check.That(${subject}).EndsWith(${value});"),
-            
-            // .Should().NotBeNullOrEmpty() -> Check.That(var).Not.IsNullOrEmpty();
-            GetSubjectOnlyReplacement("NotBeNullOrEmpty", "Check.That(${subject}).Not.IsNullOrEmpty();"),
         };
 
         // Apply general replacements

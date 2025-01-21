@@ -180,6 +180,18 @@ The following FluentAssertions methods are currently supported and are automatic
 | `.Should().StartWith(value)`               | `Check.That(var).StartsWith(value);`         |
 | `.Should().EndWith(value)`                 | `Check.That(var).EndsWith(value);`           |
 
+### String Assertions
+
+| **FluentAssertions**                | **NFluent**                                 |
+|-------------------------------------|---------------------------------------------|
+| `.Should().NotBeNull()`             | `Check.That(var).IsNotNull();`              |
+| `.Should().BeNull()`                | `Check.That(var).IsNull();`                 |
+| `.Should().BeEmpty()`               | `Check.That(var).IsEmpty();`                |
+| `.Should().NotBeEmpty()`            | `Check.That(var).Not.IsEmpty();`            |
+| `.Should().HaveLength(value)`       | `Check.That(var).HasSize(value);`           |
+| `.Should().BeNullOrWhiteSpace()`    | `Check.That(var).IsNullOrWhiteSpace()`      |
+| `.Should().NotBeNullOrWhiteSpace()` | `Check.That(var).Not.IsNullOrWhiteSpace();` |
+
 ### Boolean Assertions
 | **FluentAssertions**               | **NFluent**                        |
 |------------------------------------|------------------------------------|
