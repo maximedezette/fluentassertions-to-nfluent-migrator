@@ -74,6 +74,9 @@ public class CsFileContentReplacer : IReplacer
             // .Should().HaveCountGreaterThanOrEqualTo(value) -> Check.That(var).WhoseSize().IsGreaterOrEqualThan(value);
             GetSubjectValueReplacement("HaveCountGreaterThanOrEqualTo", "Check.That(${subject}).WhoseSize().IsGreaterOrEqualThan(${value});"),
             
+            // .Should().HaveCountGreaterThan(value) -> Check.That(var).WhoseSize().IsStrictlyGreaterThan(value);
+            GetSubjectValueReplacement("HaveCountGreaterThan", "Check.That(${subject}).WhoseSize().IsStrictlyGreaterThan(${value});"),
+            
             // .Should().HaveLength(value) -> Check.That(var).HasSize(value);
             GetSubjectValueReplacement("HaveLength", "Check.That(${subject}).HasSize(${value});"),
                 
