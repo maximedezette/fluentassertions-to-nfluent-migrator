@@ -71,6 +71,9 @@ public class CsFileContentReplacer : IReplacer
             // .Should().HaveSameCount(value) -> Check.That(var).HasSameSizeAs(value);
             GetSubjectValueReplacement("HaveSameCount", "Check.That(${subject}).HasSameSizeAs(${value});"),
             
+            // .Should().HaveCountGreaterThanOrEqualTo(value) -> Check.That(var).WhoseSize().IsGreaterOrEqualThan(value);
+            GetSubjectValueReplacement("HaveCountGreaterThanOrEqualTo", "Check.That(${subject}).WhoseSize().IsGreaterOrEqualThan(${value});"),
+            
             // .Should().HaveLength(value) -> Check.That(var).HasSize(value);
             GetSubjectValueReplacement("HaveLength", "Check.That(${subject}).HasSize(${value});"),
                 
