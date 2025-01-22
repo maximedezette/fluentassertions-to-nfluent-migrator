@@ -122,16 +122,20 @@ public class CsFileContentReplacer : IReplacer
     {
         var exceptionReplacements = new (string Pattern, string Replacement)[]
         {
-            // .Should().Throw<ExceptionType>() -> Check.ThatCode(action).Throws<ExceptionType>();
-            (@"(?<action>\S(?:.*\S)?)\s*\.Should\(\)\s*\.Throw\s*<(?<exceptionType>[^>]+)>\s*\(\s*\)\s*;", 
-                "Check.ThatCode(${action}).Throws<${exceptionType}>();"),
-        
-            // .Should().ThrowExactly<ExceptionType>() -> Check.ThatCode(action).ThrowsExactly<ExceptionType>();
-            (@"(?<action>\S(?:.*\S)?)\s*\.Should\(\)\s*\.ThrowExactly\s*<(?<exceptionType>[^>]+)>\s*\(\s*\)\s*;", 
-                "Check.ThatCode(${action}).ThrowsExactly<${exceptionType}>();"),
+            // .Should().Throw<ExceptionType>()*; -> Check.ThatCode(action).Throws<ExceptionType>()*;
+            (@"(?<action>\S(?:.*\S)?)\s*\.Should\(\)\s*\.Throw\s*<(?<exceptionType>[^>]+)>\s*\(\s*\)\s*", 
+                "Check.ThatCode(${action}).Throws<${exceptionType}>()"),
+            
+            // .Should().ThrowExactly<ExceptionType>()*; -> Check.ThatCode(action).ThrowsExactly<ExceptionType>()*;
+            (@"(?<action>\S(?:.*\S)?)\s*\.Should\(\)\s*\.ThrowExactly\s*<(?<exceptionType>[^>]+)>\s*\(\s*\)\s*", 
+                "Check.ThatCode(${action}).Throws<${exceptionType}>()"),
         
             // .Should().NotThrow() -> Check.ThatCode(action).DoesNotThrow();
             (@"(?<action>\S(?:.*\S)?)\s*\.Should\(\)\s*\.NotThrow\s*\(\s*\)\s*;", 
+                "Check.ThatCode(${action}).DoesNotThrow();"),
+            
+            // .Should().NotThrowAsync() -> Check.ThatCode(action).DoesNotThrow();
+            (@"(?:await\s+)?(?<action>\S(?:.*\S)?)\s*\.Should\(\)\s*\.NotThrowAsync\s*\(\s*\)\s*;", 
                 "Check.ThatCode(${action}).DoesNotThrow();")
         };
 
