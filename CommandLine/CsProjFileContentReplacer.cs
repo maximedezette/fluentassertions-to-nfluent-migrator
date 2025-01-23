@@ -12,10 +12,17 @@ public class CsProjFileContentReplacer : IReplacer
     public string Replace(string content)
     {
         const string targetNfluentVersion = "3.1.0";
-        var pattern = @"<\s*PackageReference\s+Include\s*=\s*""FluentAssertions""\s+Version\s*=\s*""[^""]+""\s*/>";
-
-        var replacement = $@"<PackageReference Include=""NFluent"" Version=""{targetNfluentVersion}""/>";
+        var versionReplacements = new (string Pattern, string Replacement)[]
+        {
+            (@"<\s*PackageReference\s+Include\s*=\s*""FluentAssertions""\s+Version\s*=\s*""[^""]+""\s*/>", $@"<PackageReference Include=""NFluent"" Version=""{targetNfluentVersion}""/>"),
+            (@"<\s*PackageReference\s+Include\s*=\s*""FluentAssertions""\s+/>", @"<PackageReference Include=""NFluent""/>"),
+        };
         
-        return Regex.Replace(content, pattern, replacement);
+        foreach (var (pattern, replacement) in versionReplacements)
+        {
+            content = Regex.Replace(content, pattern, replacement);
+        }
+
+        return content;
     }
 }
