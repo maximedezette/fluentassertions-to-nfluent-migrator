@@ -113,8 +113,10 @@ public class CsFileContentReplacer : IReplacer
 
     private static (string, string) GetSubjectValueReplacement(string Pattern, string Replacement)
     {
-        return ($@"(?<subject>\S(?:.*\S)?)\s*\.Should\(\)\s*\.{Pattern}\s*\(\s*(?<value>(?:\(.*?\)|[^,()])+)\s*(?:,\s*.*)?\)\s*;", Replacement);
+        return ($@"(?<subject>\S(?:.*?\S)?)\s*\.Should\(\)\s*\.{Pattern}\s*\(\s*(?<value>(""(?:[^""\\]|\\.)*""|'(?:[^'\\]|\\.)*'|\((?:[^()]*|\((?:[^()]*|\([^()]*\))*\))*\)|[^,()])+?)\s*(?:,\s*""[^""]*"")?\)\s*;", Replacement);
     }
+
+
     
     private static (string, string) GetSubjectOnlyReplacement(string Pattern, string Replacement)
     {

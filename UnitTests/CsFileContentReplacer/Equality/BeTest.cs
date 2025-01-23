@@ -59,5 +59,16 @@ public class BeTest: CsTestContentReplacerTest
         var actual = CsFileContentReplacer.Replace(fluentAssertions);
 
         Check.That(actual).IsEqualTo(nfluentEquivalent);
+    }    
+    
+    [Fact]
+    public void Should_replace_ShouldBe_with_complex_value_2()
+    {
+        const string fluentAssertions = "response.Headers[HttpResponseHeader.Expires].Should().Be(\"Thu, 01 Jan 1970 00:00:00 GMT\");";
+        const string nfluentEquivalent = "Check.That(response.Headers[HttpResponseHeader.Expires]).IsEqualTo(\"Thu, 01 Jan 1970 00:00:00 GMT\");";
+
+        var actual = CsFileContentReplacer.Replace(fluentAssertions);
+
+        Check.That(actual).IsEqualTo(nfluentEquivalent);
     }
 }
