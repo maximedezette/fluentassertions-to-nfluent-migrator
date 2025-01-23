@@ -13,6 +13,17 @@ public class BeOfTypeTest : CsTestContentReplacerTest
 
         Check.That(actual).IsEqualTo(nfluentEquivalent);
     }    
+    
+    [Fact]
+    public void Should_replace_ShouldBeOfType_without_diamonds()
+    {
+        const string fluentAssertions = "var.Should().BeOfType(object.getType());";
+        const string nfluentEquivalent = "Check.That(var).IsInstanceOfType(object.getType());";
+
+        var actual = CsFileContentReplacer.Replace(fluentAssertions);
+
+        Check.That(actual).IsEqualTo(nfluentEquivalent);
+    }   
 
     [Fact]
     public void Should_replace_ShouldBeOfType_with_multi_lines()

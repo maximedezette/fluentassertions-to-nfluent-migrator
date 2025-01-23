@@ -53,6 +53,10 @@ public class CsFileContentReplacer : IReplacer
             // .Should().BeLessOrEqualTo(value) -> Check.That(var).IsLessOrEqualTo(value);
             GetSubjectValueReplacement("BeLessOrEqualTo", "Check.That(${subject}).IsLessOrEqualTo(${value});"),
             
+            
+            // .Should().BeOfType(value) -> Check.That(var).IsInstanceOfType(value);
+            GetSubjectValueReplacement("BeOfType", "Check.That(${subject}).IsInstanceOfType(${value});"),
+            
             // .Should().BeOfType<value>() -> Check.That(var).IsInstanceOfType(value);
             (@"(?<subject>\S(?:.*\S)?)\s*\.Should\s*\(\s*\)\s*\.BeOfType\s*<\s*(?<value>[^\>]+)\s*>\s*\(\s*\)\s*;", "Check.That(${subject}).IsInstanceOfType(typeof(${value}));"),
             
