@@ -69,6 +69,17 @@ public class CsFileContentReplacer : IReplacer
             // .Should().ContainKey(value) -> Check.That(var.Keys).Contains(value);
             GetSubjectValueReplacement("ContainKey", "Check.That(${subject}.Keys).Contains(${value});"),
             
+            
+            // .Should().ContainSingle(value) -> Check.That(var.Count(value)).IsEqualTo(1);
+            GetSubjectValueReplacement("ContainSingle", "Check.That(${subject}.Count(${value})).IsEqualTo(1);"),
+
+            // .Should().ContainSingle(value) -> Check.That(var.Count(value)).IsEqualTo(1);
+            GetSubjectOnlyReplacement("ContainSingle", "Check.That(${subject}).HasSize(1);"),
+            
+            // .Should().NotContainKey(value) -> Check.That(var.Keys).Not.Contains(value);
+            GetSubjectValueReplacement("NotContainKey", "Check.That(${subject}.Keys).Not.Contains(${value});"),
+
+            
             // .Should().OnlyContain(value) -> Check.That(var).ContainsOnlyElementsThatMatch(value);
             GetSubjectValueReplacement("OnlyContain", "Check.That(${subject}).ContainsOnlyElementsThatMatch(${value});"),
             
