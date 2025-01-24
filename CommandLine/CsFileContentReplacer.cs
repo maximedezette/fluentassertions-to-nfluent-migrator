@@ -123,6 +123,10 @@ public class CsFileContentReplacer : IReplacer
             
             // .Should().EndWith(value) -> Check.That(var).EndsWith(value);
             GetSubjectValueReplacement("EndWith", "Check.That(${subject}).EndsWith(${value});"),
+            
+            // .Execute.Assertion.FailWith(reason) -> Check.Fail(reason);
+            (@"Execute\.Assertion\.FailWith\((?<message>\$""(?:[^""\\]|\\.)*""|'(?:[^'\\]|\\.)*')\);", 
+                "Check.WithCustomMessage(${message}).That(false ).IsTrue();")
         };
 
         // Apply general replacements
