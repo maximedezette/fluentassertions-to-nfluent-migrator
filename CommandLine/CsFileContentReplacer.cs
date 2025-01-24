@@ -156,18 +156,26 @@ public class CsFileContentReplacer : IReplacer
             // .Should().Throw<ExceptionType>()*; -> Check.ThatCode(action).Throws<ExceptionType>()*;
             (@"(?<action>\S(?:.*\S)?)\s*\.Should\(\)\s*\.Throw\s*<(?<exceptionType>[^>]+)>\s*\(\s*\)\s*", 
                 "Check.ThatCode(${action}).Throws<${exceptionType}>()"),
-            
+        
             // .Should().ThrowExactly<ExceptionType>()*; -> Check.ThatCode(action).ThrowsExactly<ExceptionType>()*;
             (@"(?<action>\S(?:.*\S)?)\s*\.Should\(\)\s*\.ThrowExactly\s*<(?<exceptionType>[^>]+)>\s*\(\s*\)\s*", 
                 "Check.ThatCode(${action}).Throws<${exceptionType}>()"),
-        
+    
             // .Should().NotThrow() -> Check.ThatCode(action).DoesNotThrow();
             (@"(?<action>\S(?:.*\S)?)\s*\.Should\(\)\s*\.NotThrow\s*\(\s*\)\s*;", 
                 "Check.ThatCode(${action}).DoesNotThrow();"),
-            
+        
             // .Should().NotThrowAsync() -> Check.ThatCode(action).DoesNotThrow();
             (@"(?:await\s+)?(?<action>\S(?:.*\S)?)\s*\.Should\(\)\s*\.NotThrowAsync\s*\(\s*\)\s*;", 
-                "Check.ThatCode(${action}).DoesNotThrow();")
+                "Check.ThatCode(${action}).DoesNotThrow();"),
+        
+            // .Should().ThrowAsync<ExceptionType>() -> Check.ThatCode(() => action()).ThrowsType(typeof(ExceptionType))
+            (@"await\s+(?<action>\S(?:.*\S)?)\s*\.Should\(\)\s*\.ThrowAsync\s*<(?<exceptionType>[^>]+)>\s*\(\s*\)", 
+                "Check.ThatCode(() => ${action}()).ThrowsType(typeof(${exceptionType}))"),
+        
+            // .Should().ThrowAsync<ExceptionType>().WithMessage("...") -> Check.ThatCode(() => action()).ThrowsType(typeof(ExceptionType)).WithMessage("...")
+            (@"await\s+(?<action>\S(?:.*\S)?)\s*\.Should\(\)\s*\.ThrowAsync\s*<(?<exceptionType>[^>]+)>\s*\(\s*\)\s*\.WithMessage\((?<message>[^)]+)\)", 
+                "Check.ThatCode(() => ${action}()).ThrowsType(typeof(${exceptionType})).WithMessage(${message})")
         };
 
         // Apply exception-specific replacements
