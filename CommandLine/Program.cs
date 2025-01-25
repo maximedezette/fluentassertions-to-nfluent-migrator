@@ -20,7 +20,7 @@ internal class Program
         UpdateTestFiles(directoryPath);
 
         watch.Stop();
-        var elapsed = watch.Elapsed.Seconds;
+        var elapsed = (int)watch.Elapsed.TotalSeconds;
         Console.ForegroundColor = ConsoleColor.Green;
         Console.OutputEncoding = Encoding.UTF8;
         Console.WriteLine("\n******************************************");
@@ -100,16 +100,19 @@ internal class Program
         var bom = new byte[4];
         using (var file = new FileStream(filename, FileMode.Open, FileAccess.Read))
         {
-            file.ReadExactly(bom, 0, 4);
+            // Read up to 4 bytes to detect the BOM
+            file.Read(bom, 0, bom.Length);
         }
 
-        if (bom[0] == 0x2b && bom[1] == 0x2f && bom[2] == 0x76) return Encoding.UTF7;
-        if (bom[0] == 0xef && bom[1] == 0xbb && bom[2] == 0xbf) return Encoding.UTF8;
-        if (bom[0] == 0xff && bom[1] == 0xfe && bom[2] == 0 && bom[3] == 0) return Encoding.UTF32;
-        if (bom[0] == 0xff && bom[1] == 0xfe) return Encoding.Unicode;
-        if (bom[0] == 0xfe && bom[1] == 0xff) return Encoding.BigEndianUnicode;
-        if (bom[0] == 0 && bom[1] == 0 && bom[2] == 0xfe && bom[3] == 0xff) return new UTF32Encoding(true, true);
+        // Detect encoding by BOM
+        if (bom[0] == 0x2b && bom[1] == 0x2f && bom[2] == 0x76) return Encoding.UTF7; // UTF-7
+        if (bom[0] == 0xef && bom[1] == 0xbb && bom[2] == 0xbf) return Encoding.UTF8; // UTF-8 with BOM
+        if (bom[0] == 0xff && bom[1] == 0xfe && bom[2] == 0 && bom[3] == 0) return Encoding.UTF32; // UTF-32 LE
+        if (bom[0] == 0xff && bom[1] == 0xfe) return Encoding.Unicode; // UTF-16 LE
+        if (bom[0] == 0xfe && bom[1] == 0xff) return Encoding.BigEndianUnicode; // UTF-16 BE
+        if (bom[0] == 0 && bom[1] == 0 && bom[2] == 0xfe && bom[3] == 0xff) return new UTF32Encoding(true, true); // UTF-32 BE
 
-        return Encoding.UTF8;
+        // If no BOM is found, assume UTF-8 (without BOM)
+        return new UTF8Encoding(false);
     }
 }
