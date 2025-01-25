@@ -154,12 +154,14 @@ public class CsFileContentReplacer : IReplacer
     /// <returns>The updated source code with replaced assertions.</returns>
     private string ReplaceWildcards(string content)
     {
-        if (content.Contains("Matches"))
-        {
-            content = content.Replace("*", ".*");
-        }
+        var regex = new Regex(@"\.Matches\((@?""[^""]*""|@?'[^']*')\)");
 
-        return content;
+        return regex.Replace(content, match =>
+        {
+            var originalContent = match.Groups[1].Value; 
+            var modifiedContent = originalContent.Replace("*", ".*");
+            return $".Matches({modifiedContent})"; 
+        });
     }
 
     private static (string, string) GetSubjectValueReplacement(string Pattern, string Replacement)
