@@ -23,7 +23,24 @@ public class ThrowAsyncTest: CsTestContentReplacerTest
                                         ".WithMessage(\"Failed\");";
         const string nfluentEquivalent = "Check.ThatCode(() => act())" +
                                          ".ThrowsType(typeof(InternalErrorException))" +
-                                         ".WithMessage(\"Failed\");";
+                                         ".AndWhichMessage()" +
+                                         ".Matches(\"Failed\");";
+
+        var actual = CsFileContentReplacer.Replace(fluentAssertions);
+
+        Check.That(actual).IsEqualTo(nfluentEquivalent);
+    }
+    
+    [Fact]
+    public void Should_Replace_ThrowAsyncWithMessage_including_wildcard()
+    {
+        const string fluentAssertions = "await act.Should()" +
+                                        "\n.ThrowAsync<InternalErrorException>()" +
+                                        ".WithMessage(\"Failed because '*'\");";
+        const string nfluentEquivalent = "Check.ThatCode(() => act())" +
+                                         ".ThrowsType(typeof(InternalErrorException))" +
+                                         ".AndWhichMessage()" +
+                                         ".Matches(\"Failed because '.*'\");";
 
         var actual = CsFileContentReplacer.Replace(fluentAssertions);
 
