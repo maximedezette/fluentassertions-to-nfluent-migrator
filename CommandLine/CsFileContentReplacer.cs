@@ -119,6 +119,9 @@ public class CsFileContentReplacer : IReplacer
 
             // .Should().NotBeEmpty() -> Check.That(var).IsNotEmpty();
             GetSubjectOnlyReplacement("NotBeEmpty", "Check.That(${subject}).Not.IsEmpty();"),
+            
+            // .Should().BeNullOrEmpty() -> Check.That(var).IsNullOrEmpty();
+            GetSubjectOnlyReplacement("BeNullOrEmpty", "Check.That(${subject}).IsNullOrEmpty();"),
 
             // .Should().NotBeNullOrEmpty() -> Check.That(var).Not.IsNullOrEmpty();
             GetSubjectOnlyReplacement("NotBeNullOrEmpty", "Check.That(${subject}).Not.IsNullOrEmpty();"),
