@@ -185,6 +185,10 @@ public class CsFileContentReplacer : IReplacer
     {
         var exceptionReplacements = new (string Pattern, string Replacement)[]
         {
+            // .Should().Throw<ExceptionType>().WithMessage("..."); -> Check.ThatCode(action).Throws<ExceptionType>().AndWhichMessage().Matches("...");
+            (@"(?<action>\S(?:.*\S)?)\s*\.Should\(\)\s*\.Throw\s*<(?<exceptionType>[^>]+)>\s*\(\s*\)\s*\.WithMessage\((?<message>[^)]+)\)",
+            "Check.ThatCode(${action}).Throws<${exceptionType}>().AndWhichMessage().Matches(${message})"),
+            
             // .Should().Throw<ExceptionType>()*; -> Check.ThatCode(action).Throws<ExceptionType>()*;
             (@"(?<action>\S(?:.*\S)?)\s*\.Should\(\)\s*\.Throw\s*<(?<exceptionType>[^>]+)>\s*\(\s*\)\s*",
                 "Check.ThatCode(${action}).Throws<${exceptionType}>()"),

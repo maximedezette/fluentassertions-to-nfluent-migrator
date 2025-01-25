@@ -30,7 +30,7 @@ public class ThrowTest: CsTestContentReplacerTest
     public void Should_replace_ThrowWithMessage()
     {
         const string fluentAssertions = "var.Should().Throw<MyException>().WithMessage(\"My message\");";
-        const string nfluentEquivalent = "Check.ThatCode(var).Throws<MyException>().WithMessage(\"My message\");";
+        const string nfluentEquivalent = "Check.ThatCode(var).Throws<MyException>().AndWhichMessage().Matches(\"My message\");";
 
         string actual = CsFileContentReplacer.Replace(fluentAssertions);
 
