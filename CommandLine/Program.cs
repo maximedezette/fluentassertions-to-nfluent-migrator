@@ -72,7 +72,7 @@ internal class Program
             // Display the spinner during the replacement
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.Write($"Processing {Path.GetFileName(file)}... ");
-            var content = File.ReadAllText(file);
+            var content = File.ReadAllText(file, Encoding.UTF8);
             var updatedContent = replacer.Replace(content);
             File.WriteAllText(file, updatedContent, GetEncoding(file));
 
@@ -110,6 +110,6 @@ internal class Program
         if (bom[0] == 0xfe && bom[1] == 0xff) return Encoding.BigEndianUnicode;
         if (bom[0] == 0 && bom[1] == 0 && bom[2] == 0xfe && bom[3] == 0xff) return new UTF32Encoding(true, true);
 
-        return Encoding.ASCII;
+        return Encoding.UTF8;
     }
 }
