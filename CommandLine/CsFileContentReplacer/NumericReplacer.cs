@@ -22,6 +22,12 @@ public partial class CsFileContentReplacer
 
             // .Should().BeLessOrEqualTo(value) -> Check.That(var).IsLessOrEqualTo(value);
             GetSubjectValueReplacement("BeLessOrEqualTo", "Check.That(${subject}).IsLessOrEqualTo(${value});"),
+            
+            // .Should().BePositive() -> Check.That(var).IsStrictlyPositive();
+            GetSubjectOnlyReplacement("BePositive", "Check.That(${subject}).IsStrictlyPositive();"),
+            
+            // .Should().BeNegative() -> Check.That(var).IsStrictlyNegative();
+            GetSubjectOnlyReplacement("BeNegative", "Check.That(${subject}).IsStrictlyNegative();"),
         };
 
         foreach (var (pattern, replacement) in numericReplacements)
