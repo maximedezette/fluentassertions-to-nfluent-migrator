@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace CommandLine;
+namespace CommandLine.CsProjFileContentReplacer;
 
 public class CsProjFileContentReplacer : IReplacer
 {

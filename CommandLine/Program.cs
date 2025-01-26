@@ -32,7 +32,7 @@ internal class Program
     private static void UpdateTestFiles(string directoryPath)
     {
         var files = GetTestFiles(directoryPath);
-        ProcessReplacement(files, new CsFileContentReplacer());
+        ProcessReplacement(files, new CsFileContentReplacer.CsFileContentReplacer());
     }
 
     private static string[] GetTestFiles(string directoryPath)
@@ -49,7 +49,7 @@ internal class Program
     private static void UpdateCsprojFiles(string directoryPath)
     {
         var csProjFiles = GetCsProjFiles(directoryPath);
-        ProcessReplacement(csProjFiles, new CsProjFileContentReplacer());
+        ProcessReplacement(csProjFiles, new CsProjFileContentReplacer.CsProjFileContentReplacer());
     }
     
     private static string[] GetCsProjFiles(string directoryPath)
