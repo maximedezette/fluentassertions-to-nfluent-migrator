@@ -16,6 +16,10 @@ A simple command-line tool for migrating your code from **FluentAssertions** to 
 
 [![demo](https://img.youtube.com/vi/oVfizaskDAU/0.jpg)](https://www.youtube.com/watch?v=oVfizaskDAU)
 
+### Example migrating a project with thousands of tests (french version)
+
+[![demo](https://img.youtube.com/vi/rsNbTRvqCNs/0.jpg)](https://www.youtube.com/watch?v=rsNbTRvqCNs)
+
 ⚠️ **As of today, not all assertions are fully supported by the tool, and some manual transformations are likely to be required. However, it significantly eases the migration process by automating many common cases.**
 
 
@@ -150,6 +154,14 @@ Add the regex to the `CsFileContentReplacer.cs` to make the test pass:
 
 And that's it!
 
+If you never contributed to an open source project yet, It is a good opportunity to try
+because this project is very simple. 
+
+Here is a simple guide that demonstrate [how to make a contribution for the first time](https://github.com/firstcontributions/first-contributions).
+
+If you have doubts, need help or anything do not hesitate to ask your questions in an issue, we will gladly provide
+all the help we can :blush:
+
 # FluentAssertions to NFluent Migration Support
 
 This document provides an overview of the migration support offered by the `CsFileContentReplacer` for transitioning from FluentAssertions to NFluent in C# projects. While the tool automates the replacement of many common assertions, there are limitations, and some manual adjustments may be necessary.
@@ -171,10 +183,13 @@ The following FluentAssertions methods are currently supported and are automatic
 | `.Should().BeLessOrEqualTo(value)`         | `Check.That(var).IsLessOrEqualTo(value);`    |
 | `.Should().BeEquivalentTo(object)`         | `Check.That(var).HasFieldsWithSameValues(object);` |
 | `.Should().Contain(value)`                 | `Check.That(var).Contains(value);`           |
+| `.Should().NotContain(value)`              | `Check.That(var).Not.Contains(value);`       |
+| `.Should().ContainSingle()`                | `Check.That(var).HasSize(1);`                |
 | `.Should().OnlyContain(value)`             | `Check.That(var).ContainsOnlyElementsThatMatch(value);` |
 | `.Should().HaveCount(value)`               | `Check.That(var).HasSize(value);`            |
 | `.Should().HaveSameCount(value)`           | `Check.That(var).HasSameSizeAs(value);`      |
-| `.Should().NotContain(value)`              | `Check.That(var).Not.Contains(value);`       |
+| `.Should().HaveCountGreaterThan(value)`    | `Check.That(var).WhoseSize().IsStrictlyGreaterThan(value);` |
+| `.Should().HaveCountGreaterOrEqualTo(value)` | `Check.That(var).WhoseSize().IsGreaterOrEqualThan(value);` |
 | `.Should().BeEmpty()`                      | `Check.That(var).IsEmpty();`                 |
 | `.Should().NotBeEmpty()`                   | `Check.That(var).IsNotEmpty();`              |
 | `.Should().StartWith(value)`               | `Check.That(var).StartsWith(value);`         |
@@ -184,12 +199,10 @@ The following FluentAssertions methods are currently supported and are automatic
 
 | **FluentAssertions**                | **NFluent**                                 |
 |-------------------------------------|---------------------------------------------|
-| `.Should().NotBeNull()`             | `Check.That(var).IsNotNull();`              |
-| `.Should().BeNull()`                | `Check.That(var).IsNull();`                 |
 | `.Should().BeEmpty()`               | `Check.That(var).IsEmpty();`                |
 | `.Should().NotBeEmpty()`            | `Check.That(var).Not.IsEmpty();`            |
 | `.Should().HaveLength(value)`       | `Check.That(var).HasSize(value);`           |
-| `.Should().BeNullOrWhiteSpace()`    | `Check.That(var).IsNullOrWhiteSpace()`      |
+| `.Should().BeNullOrWhiteSpace()`    | `Check.That(var).IsNullOrWhiteSpace();`     |
 | `.Should().NotBeNullOrWhiteSpace()` | `Check.That(var).Not.IsNullOrWhiteSpace();` |
 
 ### Boolean Assertions
@@ -199,21 +212,39 @@ The following FluentAssertions methods are currently supported and are automatic
 | `.Should().BeFalse()`              | `Check.That(var).IsFalse();`       |
 | `.Should().NotBeTrue()`            | `Check.That(var).Not.IsTrue();`    |
 | `.Should().NotBeFalse()`           | `Check.That(var).Not.IsFalse();`   |
-| `.Should().Imply(other)`           | `Check.That(var).Imply(other);`    |
-
-### Nullable Assertions
-| **FluentAssertions**               | **NFluent**                        |
-|------------------------------------|------------------------------------|
-| `.Should().NotHaveValue()`         | `Check.That(var).Not.HasValue();`  |
-| `.Should().HaveValue()`            | `Check.That(var).HasValue();`      |
-| `.Should().Match(predicate)`       | `Check.That(var).Matches(predicate);` |
 
 ### Exception Assertions
-| **FluentAssertions**                       | **NFluent**                                   |
-|--------------------------------------------|-----------------------------------------------|
-| `.Should().Throw<ExceptionType>()`         | `Check.ThatCode(action).Throws<ExceptionType>();` |
-| `.Should().ThrowExactly<ExceptionType>()`  | `Check.ThatCode(action).ThrowsExactly<ExceptionType>();` |
-| `.Should().NotThrow()`                     | `Check.ThatCode(action).DoesNotThrow();`      |
+
+| **FluentAssertions**                                       | **NFluent**                                                                                          |
+|------------------------------------------------------------|------------------------------------------------------------------------------------------------------|
+| `.Should().Throw<ExceptionType>()`                         | `Check.ThatCode(action).Throws<ExceptionType>();`                                                    |
+| `.Should().ThrowExactly<ExceptionType>()`                  | `Check.ThatCode(action).ThrowsExactly<ExceptionType>();`                                             |
+| `.Should().NotThrow()`                                     | `Check.ThatCode(action).DoesNotThrow();`                                                             |
+| `.Should().ThrowAsync<ExceptionType>()`                    | `Check.ThatCode(() => action()).ThrowsType(typeof(ExceptionType));`                                  |
+| `.Should().NotThrowAsync()`                                | `Check.ThatCode(() => action()).DoesNotThrow();`                                                     |
+| `.Should().Throw<ExceptionType>().WithMessage("...")`      | `Check.ThatCode(action).Throws<ExceptionType>().AndWhichMessage().Matches("...");`                   |
+| `.Should().ThrowAsync<ExceptionType>().WithMessage("...")` | `Check.ThatCode(() => action()).ThrowsType(typeof(ExceptionType)).AndWhichMessage().Matches("...");` |
+
+### Nullable Assertions
+| **FluentAssertions**               | **NFluent**                          |
+|------------------------------------|---------------------------------------|
+| `.Should().HaveValue()`            | `Check.That(var).HasValue();`         |
+| `.Should().NotHaveValue()`         | `Check.That(var).Not.HasValue();`     |
+| `.Should().Match(x => condition)`  | `Check.That(var).Matches(x => condition);` |
+
+### Collection Assertions
+
+| **FluentAssertions**             | **NFluent**                                    |
+|----------------------------------|------------------------------------------------|
+| `.Should().ContainKey(value)`    | `Check.That(var.Keys).Contains(value);`        |
+| `.Should().NotContainKey(value)` | `Check.That(var.Keys).Not.Contains(value);`    |
+| `.Should().BeOfType<T>()`        | `Check.That(var).IsInstanceOfType(typeof(T));` |
+| `.Should().BeOfType(value)`      | `Check.That(var).IsInstanceOfType(value);`     |
+| `.Should().Equal(value)`         | `Check.That(var).IsEqualTo(value);`            |
+| `.Should().NotEqual(value)`      | `Check.That(var).IsNotEqualTo(value);`         |
+| `.Should().ContainSingle()`      | `Check.That(var).HasSize(1);`                  |
+| `.Should().BeNullOrEmpty()`      | `Check.That(var).IsNullOrEmpty();`             |
+| `.Should().NotBeNullOrEmpty()`   | `Check.That(var).Not.IsNullOrEmpty();`         |
 
 ## Limitations
 
