@@ -72,6 +72,10 @@ public partial class CsFileContentReplacer
 
             // .Should().NotBeNullOrEmpty() -> Check.That(var).Not.IsNullOrEmpty();
             GetSubjectOnlyReplacement("NotBeNullOrEmpty", "Check.That(${subject}).Not.IsNullOrEmpty();"),
+            
+            // .Should().BeOneOf(collection) -> Check.That(collection).Contains(var);
+            GetSubjectValueReplacement("BeOneOf", "Check.That(${value}).Contains(${subject});"),
+
         };
 
         foreach (var (pattern, replacement) in collectionReplacements)
