@@ -19,7 +19,7 @@ public class ThrowExactlyTest: CsTestContentReplacerTest
     public void Should_Replace_ThrowExactlyWithMessage()
     {
         const string fluentAssertions = "action.Should().ThrowExactly<InvalidOperationException>().WithMessage(\"My message\");";
-        const string nfluentEquivalent = "Check.ThatCode(action).Throws<InvalidOperationException>().WithMessage(\"My message\");";
+        const string nfluentEquivalent = "Check.ThatCode(action).Throws<InvalidOperationException>().AndWhichMessage().Matches(\"My message\");";
 
         var actual = CsFileContentReplacer.Replace(fluentAssertions);
 

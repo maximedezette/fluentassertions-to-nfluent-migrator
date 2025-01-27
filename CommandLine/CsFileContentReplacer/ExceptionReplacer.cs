@@ -2,27 +2,21 @@
 
 namespace CommandLine.CsFileContentReplacer;
 
-public partial class CsFileContentReplacer
+public class ExceptionReplacer: Handler
 {
      /// <summary>
     /// Applies exception-specific assertions replacement rules to the provided content.
     /// </summary>
-    private static string ReplaceExceptionAssertions(string content)
+    public override string Handle(string content)
     {
         var exceptionReplacements = new (string Pattern, string Replacement)[]
         {
-            // .Should().Throw<ExceptionType>().WithMessage("..."); -> Check.ThatCode(action).Throws<ExceptionType>().AndWhichMessage().Matches("...");
-            (@"(?<action>\S(?:.*\S)?)\s*\.Should\(\)\s*\.Throw\s*<(?<exceptionType>[^>]+)>\s*\(\s*\)\s*\.WithMessage\((?<message>[^)]+)\)",
-            "Check.ThatCode(${action}).Throws<${exceptionType}>().AndWhichMessage().Matches(${message})"),
-            
             // .Should().Throw<ExceptionType>()*; -> Check.ThatCode(action).Throws<ExceptionType>()*;
-            (@"(?<action>\S(?:.*\S)?)\s*\.Should\(\)\s*\.Throw\s*<(?<exceptionType>[^>]+)>\s*\(\s*\)\s*",
-                "Check.ThatCode(${action}).Throws<${exceptionType}>()"),
+            GetSubjectValueInDiamond("Throw", "Check.ThatCode(${subject}).Throws<${value}>()"),
 
             // .Should().ThrowExactly<ExceptionType>()*; -> Check.ThatCode(action).ThrowsExactly<ExceptionType>()*;
-            (@"(?<action>\S(?:.*\S)?)\s*\.Should\(\)\s*\.ThrowExactly\s*<(?<exceptionType>[^>]+)>\s*\(\s*\)\s*",
-                "Check.ThatCode(${action}).Throws<${exceptionType}>()"),
-
+            GetSubjectValueInDiamond("ThrowExactly", "Check.ThatCode(${subject}).Throws<${value}>()"),
+            
             // .Should().NotThrow() -> Check.ThatCode(action).DoesNotThrow();
             (@"(?<action>\S(?:.*\S)?)\s*\.Should\(\)\s*\.NotThrow\s*\(\s*\)\s*;",
                 "Check.ThatCode(${action}).DoesNotThrow();"),
@@ -37,7 +31,7 @@ public partial class CsFileContentReplacer
 
             // .Should().ThrowAsync<ExceptionType>() -> Check.ThatCode(() => action()).ThrowsType(typeof(ExceptionType))
             (@"await\s+(?<action>\S(?:.*\S)?)\s*\.Should\(\)\s*\.ThrowAsync\s*<(?<exceptionType>[^>]+)>\s*\(\s*\)",
-                "Check.ThatCode(() => ${action}()).ThrowsType(typeof(${exceptionType}))"),
+                "Check.ThatCode(() => ${action}()).ThrowsType(typeof(${exceptionType}))")
         };
 
         // Apply exception-specific replacements
@@ -46,6 +40,9 @@ public partial class CsFileContentReplacer
             content = Regex.Replace(content, pattern, replacement);
         }
 
-        return content;
+
+        content = content.Replace(".WithMessage", ".AndWhichMessage().Matches");
+        
+        return Next is not null ? Next.Handle(content) : content;
     }
 }

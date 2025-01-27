@@ -2,12 +2,11 @@
 
 namespace CommandLine.CsFileContentReplacer;
 
-public partial class CsFileContentReplacer
-{
+public class NumericReplacer : Handler{
     /// <summary>
     /// Applies numeric-specific assertions replacement rules to the provided content.
     /// </summary>
-    private static string ReplaceNumericAssertions(string content)
+    public override string Handle(string content)
     {
         var numericReplacements = new (string Pattern, string Replacement)[]
         {
@@ -35,6 +34,6 @@ public partial class CsFileContentReplacer
             content = Regex.Replace(content, pattern, replacement);
         }
 
-        return content;
+        return Next is not null ? Next.Handle(content) : content;
     }
 }
