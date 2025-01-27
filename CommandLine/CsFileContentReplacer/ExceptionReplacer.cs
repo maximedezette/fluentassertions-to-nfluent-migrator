@@ -18,20 +18,13 @@ public class ExceptionReplacer: Handler
             GetSubjectValueInDiamond("ThrowExactly", "Check.ThatCode(${subject}).Throws<${value}>()"),
             
             // .Should().NotThrow() -> Check.ThatCode(action).DoesNotThrow();
-            (@"(?<action>\S(?:.*\S)?)\s*\.Should\(\)\s*\.NotThrow\s*\(\s*\)\s*;",
-                "Check.ThatCode(${action}).DoesNotThrow();"),
+            GetSubjectOnlyReplacement("NotThrow", "Check.ThatCode(${subject}).DoesNotThrow();"),
 
             // .Should().NotThrowAsync() -> Check.ThatCode(action).DoesNotThrow();
-            (@"(?:await\s+)?(?<action>\S(?:.*\S)?)\s*\.Should\(\)\s*\.NotThrowAsync\s*\(\s*\)\s*;",
-                "Check.ThatCode(${action}).DoesNotThrow();"),
-
-            // .Should().ThrowAsync<ExceptionType>().WithMessage("...") -> Check.ThatCode(() => action()).ThrowsType(typeof(ExceptionType)).WithMessage("...")
-            (@"await\s+(?<action>\S(?:.*\S)?)\s*\.Should\(\)\s*\.ThrowAsync\s*<(?<exceptionType>[^>]+)>\s*\(\s*\)\s*\.WithMessage\((?<message>[^)]+)\)",
-                "Check.ThatCode(() => ${action}()).ThrowsType(typeof(${exceptionType})).AndWhichMessage().Matches(${message})"),
-
+            GetSubjectOnlyReplacement("NotThrowAsync", "Check.ThatCode(${subject}).DoesNotThrow();"),
+            
             // .Should().ThrowAsync<ExceptionType>() -> Check.ThatCode(() => action()).ThrowsType(typeof(ExceptionType))
-            (@"await\s+(?<action>\S(?:.*\S)?)\s*\.Should\(\)\s*\.ThrowAsync\s*<(?<exceptionType>[^>]+)>\s*\(\s*\)",
-                "Check.ThatCode(() => ${action}()).ThrowsType(typeof(${exceptionType}))")
+            GetSubjectValueInDiamond("ThrowAsync", "Check.ThatCode(() => ${subject}()).ThrowsType(typeof(${value}))"),
         };
 
         // Apply exception-specific replacements
@@ -39,9 +32,6 @@ public class ExceptionReplacer: Handler
         {
             content = Regex.Replace(content, pattern, replacement);
         }
-
-
-        content = content.Replace(".WithMessage", ".AndWhichMessage().Matches");
         
         return Next is not null ? Next.Handle(content) : content;
     }

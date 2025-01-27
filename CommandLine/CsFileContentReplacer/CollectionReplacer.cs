@@ -36,7 +36,6 @@ public class CollectionReplacer: Handler
             // .Should().ContainKey(value) -> Check.That(var.Keys).Contains(value);
             GetSubjectValueReplacement("ContainKey", "Check.That(${subject}.Keys).Contains(${value});"),
             
-            
             // .Should().NotContain(value) -> Check.That(var).Not.Contains(value);
             GetSubjectValueReplacement("NotContain", "Check.That(${subject}).Not.Contains(${value});"),
 
@@ -47,16 +46,13 @@ public class CollectionReplacer: Handler
             GetSubjectOnlyReplacement("NotBeEmpty", "Check.That(${subject}).Not.IsEmpty();"),
             
             // .Should().NotHaveValue() -> Check.That(var).Not.HasValue();
-            (@"(?<subject>\S(?:.*\S)?)\s*\.Should\(\)\s*\.NotHaveValue\s*\(\s*\)\s*;",
-                "Check.That(${subject}).Not.HasValue();"),
+            GetSubjectOnlyReplacement("NotHaveValue", "Check.That(${subject}).Not.HasValue();"),
 
             // .Should().HaveValue() -> Check.That(var).HasValue();
-            (@"(?<subject>\S(?:.*\S)?)\s*\.Should\(\)\s*\.HaveValue\s*\(\s*\)\s*;",
-                "Check.That(${subject}).HasValue();"),
+            GetSubjectOnlyReplacement("HaveValue", "Check.That(${subject}).HasValue();"),
 
             // .Should().Match(x => !x.HasValue || x > 0) -> Check.That(var).Matches(x => !x.HasValue || x > 0);
-            (@"(?<subject>\S(?:.*\S)?)\s*\.Should\(\)\s*\.Match\s*\(\s*(?<lambda>.+?)\s*\)\s*;",
-                "Check.That(${subject}).Matches(${lambda});"),
+            GetSubjectValueReplacement("Match", "Check.That(${subject}).Matches(${value});"),
             
             // .Should().HaveCountGreaterThanOrEqualTo(value) -> Check.That(var).WhoseSize().IsGreaterOrEqualThan(value);
             GetSubjectValueReplacement("HaveCountGreaterThanOrEqualTo",
@@ -65,7 +61,6 @@ public class CollectionReplacer: Handler
             // .Should().HaveCountGreaterThan(value) -> Check.That(var).WhoseSize().IsStrictlyGreaterThan(value);
             GetSubjectValueReplacement("HaveCountGreaterThan",
                 "Check.That(${subject}).WhoseSize().IsStrictlyGreaterThan(${value});"),
-            
             
             // .Should().BeNullOrEmpty() -> Check.That(var).IsNullOrEmpty();
             GetSubjectOnlyReplacement("BeNullOrEmpty", "Check.That(${subject}).IsNullOrEmpty();"),

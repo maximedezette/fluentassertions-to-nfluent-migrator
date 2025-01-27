@@ -14,21 +14,21 @@ public abstract class Handler: IHandler
     protected static (string, string) GetSubjectValueReplacement(string Pattern, string Replacement)
     {
         return (
-            $@"(?<subject>\S(?:.*?\S)?)\s*\.Should\(\)\s*\.{Pattern}\s*\(\s*(?<value>(""(?:[^""\\]|\\.)*""|'(?:[^'\\]|\\.)*'|\((?:[^()]*|\((?:[^()]*|\([^()]*\))*\))*\)|[^,()])+?)\s*(?:,\s*""[^""]*"")?\)\s*;",
+            $@"(?:await\s+)?(?<subject>\S(?:.*?\S)?)\s*\.Should\(\)\s*\.{Pattern}\s*\(\s*(?<value>(""(?:[^""\\]|\\.)*""|'(?:[^'\\]|\\.)*'|\((?:[^()]*|\((?:[^()]*|\([^()]*\))*\))*\)|[^,()])+?)\s*(?:,\s*""[^""]*"")?\)\s*;",
             Replacement);
     }
 
 
     protected static (string, string) GetSubjectOnlyReplacement(string Pattern, string Replacement)
     {
-        return ($@"(?<subject>\S(?:.*\S)?)\s*\.Should\s*\(\s*\)\s*\.{Pattern}\s*\(\s*\)\s*(?:,\s*""[^""]*""\s*)?;",
+        return ($@"(?:await\s+)?(?<subject>\S(?:.*\S)?)\s*\.Should\s*\(\s*\)\s*\.{Pattern}\s*\(\s*\)\s*(?:,\s*""[^""]*""\s*)?;",
             Replacement);
     }
     
     protected static (string, string) GetSubjectValueInDiamond(string Pattern, string Replacement)
     {
         return (
-            $@"(?<subject>\S(?:.*?\S)?)\s*\.Should\s*\(\s*\)\s*\.{Pattern}\s*<(?<value>[^\>]+)>(\(\))?",
+            $@"(?:await\s+)?(?<subject>\S(?:.*?\S)?)\s*\.Should\s*\(\s*\)\s*\.{Pattern}\s*<(?<value>[^\>]+)>(\(\))?",
             Replacement
         );
     }

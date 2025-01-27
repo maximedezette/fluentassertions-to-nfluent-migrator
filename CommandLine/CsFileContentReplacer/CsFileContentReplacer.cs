@@ -17,6 +17,7 @@ public partial class CsFileContentReplacer : IReplacer
         var exceptionReplacer = new ExceptionReplacer();
         var collectionReplacer = new CollectionReplacer();
         var wildcardReplacer = new WildcardsReplacer();
+        var messageReplacer = new MessageReplacer();
         var generalReplacer = new GeneralReplacer();
         
         generalReplacer.SetNext(booleanReplacer);
@@ -24,7 +25,8 @@ public partial class CsFileContentReplacer : IReplacer
         stringReplacer.SetNext(numericReplacer);
         numericReplacer.SetNext(exceptionReplacer );
         exceptionReplacer.SetNext(collectionReplacer);
-        collectionReplacer.SetNext(wildcardReplacer);
+        collectionReplacer.SetNext(messageReplacer);
+        messageReplacer.SetNext(wildcardReplacer);
 
         content = Regex.Replace(content, @"using\s+FluentAssertions(\.\w+)*\s*;", "using NFluent;");
         content = generalReplacer.Handle(content);
