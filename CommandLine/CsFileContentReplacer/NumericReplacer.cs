@@ -14,7 +14,7 @@ public class NumericReplacer : Handler{
             GetSubjectValueReplacement("BeGreaterThan", "Check.That(${subject}).IsGreaterThan(${value});"),
 
             // .Should().BeGreaterOrEqualTo(value) -> Check.That(var).IsGreaterOrEqualTo(value);
-            GetSubjectValueReplacement("BeGreaterOrEqualTo", "Check.That(${subject}).IsGreaterOrEqualTo(${value});"),
+            GetSubjectValueReplacement("BeGreaterOrEqualTo", "Check.That(${subject}).IsGreaterOrEqualThan(${value});"),
 
             // .Should().BeLessThan(value) -> Check.That(var).IsLessThan(value);
             GetSubjectValueReplacement("BeLessThan", "Check.That(${subject}).IsLessThan(${value});"),
