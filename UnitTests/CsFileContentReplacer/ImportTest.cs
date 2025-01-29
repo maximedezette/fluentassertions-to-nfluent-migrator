@@ -15,4 +15,19 @@ public class ImportTest:CsTestContentReplacerTest
         
         Check.That(actual).IsEqualTo(nfluentEquivalent);
     }
+    
+    [Fact]
+    public void Should_add_ApiCheck_Import_when_necessary()
+    {
+        const string fluentAssertions = "using FluentAssertions;\n" +
+                                        "var.Should().Throw<MyException>().WithMessage(\"My message\");";
+        const string nfluentEquivalent = "using NFluent;\n" +
+                                         "using NFluent.ApiChecks;\n" +
+                                         "" +
+                                         "Check.ThatCode(var).Throws<MyException>().AndWhichMessage().Matches(\"My message\");";
+        
+        var actual = CsFileContentReplacer.Replace(fluentAssertions);
+
+        Check.That(actual).IsEqualTo(nfluentEquivalent);
+    }
 }

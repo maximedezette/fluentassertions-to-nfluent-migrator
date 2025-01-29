@@ -13,11 +13,13 @@ public class WildcardsReplacer: Handler
     {
         var regex = new Regex(@"\.Matches\((@?""[^""]*""|@?'[^']*')\)");
 
-        return regex.Replace(content, match =>
+        content = regex.Replace(content, match =>
         {
             var originalContent = match.Groups[1].Value; 
             var modifiedContent = originalContent.Replace("*", ".*");
             return $".Matches({modifiedContent})"; 
         });
+        
+        return Next is not null ? Next.Handle(content) : content;
     }
 }
