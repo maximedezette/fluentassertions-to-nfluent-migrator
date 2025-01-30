@@ -72,10 +72,14 @@ internal class Program
             // Display the spinner during the replacement
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.Write($"Processing {Path.GetFileName(file)}... ");
+            var watch = System.Diagnostics.Stopwatch.StartNew(); 
             var content = File.ReadAllText(file, Encoding.UTF8);
             var updatedContent = replacer.Replace(content);
             File.WriteAllText(file, updatedContent, GetEncoding(file));
 
+            watch.Stop();
+            var elapsed = watch.Elapsed.TotalSeconds;
+            
             // Only move the cursor if it's safe
             if (Console.CursorLeft > 0)
             {
@@ -89,8 +93,18 @@ internal class Program
 
             Console.ForegroundColor = ConsoleColor.Green;
             Console.SetCursorPosition(0, Console.CursorTop);
-            Console.WriteLine($"Processing {Path.GetFileName(file)}... Done");
-            Console.ResetColor();
+
+            const double ProcessingTimeoutInSecondes = 15;
+            if (elapsed > ProcessingTimeoutInSecondes)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"Error: Processing {Path.GetFileName(file)} took too long ({elapsed:F1}s)");
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"Processing {Path.GetFileName(file)}... Done in {elapsed:F1}s");
+            }
         }
     }
 
