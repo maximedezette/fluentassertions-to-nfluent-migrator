@@ -6,7 +6,7 @@ internal class Program
 {
     
     static List<string> _timeoutFiles = [];
-    const int DEFAULT_PROCESSING_TIMEOUT = 20;
+    const int DEFAULT_PROCESSING_TIMEOUT = 30;
     static void Main(string[] args)
     {
         if (args.Length == 0)
@@ -38,7 +38,7 @@ internal class Program
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("\n**************************************************");
             Console.WriteLine($"*** ⚠️ Migration partially complete in {elapsed}s ⚠️  ***");
-            Console.WriteLine($"***             {_timeoutFiles.Count} file(s) skipped             ***");
+            Console.WriteLine($"***              {_timeoutFiles.Count} file(s) skipped              ***");
             Console.WriteLine("**************************************************\n");
         }
 
