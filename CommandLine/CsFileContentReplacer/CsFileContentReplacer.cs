@@ -20,6 +20,7 @@ public partial class CsFileContentReplacer : IReplacer
         var messageReplacer = new MessageReplacer();
         var generalReplacer = new GeneralReplacer();
         var importReplacer = new ImportReplacer();
+        var nfluentReplacer = new NFluentMultipleAssertionReplacer();
         
         generalReplacer.SetNext(booleanReplacer);
         booleanReplacer.SetNext(stringReplacer);
@@ -29,6 +30,7 @@ public partial class CsFileContentReplacer : IReplacer
         collectionReplacer.SetNext(messageReplacer);
         messageReplacer.SetNext(wildcardReplacer);
         wildcardReplacer.SetNext(importReplacer);
+        importReplacer.SetNext(nfluentReplacer);
 
         content = generalReplacer.Handle(content);
         

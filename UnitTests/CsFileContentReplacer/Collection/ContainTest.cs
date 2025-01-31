@@ -18,6 +18,17 @@ public class ContainTest: CsTestContentReplacerTest
     
         
     [Fact]
+    public void Should_replace_ShouldContain_with_predicate()
+    {
+        const string fluentAssertions = "var.Should().Contain(x => x.Length > 3);";
+        const string nfluentEquivalent = "Check.That(var).HasElementThatMatches(x => x.Length > 3);";
+        
+        var actual = CsFileContentReplacer.Replace(fluentAssertions);
+        
+        Check.That(actual).IsEqualTo(nfluentEquivalent);
+    }
+        
+    [Fact]
     public void Should_replace_ShouldContain_with_complex_subject()
     {
         const string fluentAssertions = "object!.MyMethod(some args).Should().Contain(\"item\");";
