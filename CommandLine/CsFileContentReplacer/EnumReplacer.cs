@@ -15,6 +15,18 @@ public class EnumReplacer : Handler{
             
             // .Should().NotHaveFlag(value) -> Check.That(var).Not.HasFlag(value);
             GetSubjectValueReplacement("NotHaveFlag", "Check.That(${subject}).Not.HasFlag(${value});"),
+            
+            // .Should().HaveSameNameAs(value) -> Check.That(var.ToString()).IsEqualTo(value.ToString());
+            GetSubjectValueReplacement("HaveSameNameAs", "Check.That(${subject}.ToString()).IsEqualTo(${value}.ToString());"),  
+            
+            // .Should().NotHaveSameNameAs(value) -> Check.That(var.ToString()).IsNotEqualTo(value.ToString());
+            GetSubjectValueReplacement("NotHaveSameNameAs", "Check.That(${subject}.ToString()).IsNotEqualTo(${value}.ToString());"),
+            
+            // .Should().HaveSameValueAs(value) -> Check.That(var).Considering.Fields.IsEqualTo(value);
+            GetSubjectValueReplacement("HaveSameValueAs", "Check.That(${subject}).Considering().Fields.IsEqualTo(${value});"),  
+            
+            // .Should().NotHaveSameValueAs(value) -> Check.That(var).Considering.Fields.IsNotEqualTo(value);
+            GetSubjectValueReplacement("NotHaveSameValueAs", "Check.That(${subject}).Considering().Fields.IsNotEqualTo(${value});"),
         };
 
         foreach (var (pattern, replacement) in enumReplacements)
