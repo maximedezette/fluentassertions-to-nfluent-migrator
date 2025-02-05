@@ -21,8 +21,10 @@ public partial class CsFileContentReplacer : IReplacer
         var generalReplacer = new GeneralReplacer();
         var importReplacer = new ImportReplacer();
         var nfluentReplacer = new NFluentMultipleAssertionReplacer();
+        var enumReplacer = new EnumReplacer();
         
-        generalReplacer.SetNext(booleanReplacer);
+        generalReplacer.SetNext(enumReplacer);
+        enumReplacer.SetNext(booleanReplacer);
         booleanReplacer.SetNext(stringReplacer);
         stringReplacer.SetNext(numericReplacer);
         numericReplacer.SetNext(exceptionReplacer );
